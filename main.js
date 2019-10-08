@@ -274,7 +274,7 @@ class War{
         value: 12
       }
     ];
-    
+
     for(let i=0;i<=numberOfPlayers; i++){
       this.addPlayer();
     }
@@ -285,10 +285,17 @@ class War{
 
   }
 
+
+  //Shuffles Deck
+  shuffle(){
+    
+  }
+
   //Distributes cards evenly to all players
-
   distributeCards(){
+    for(let i=0;i<this.cards.length; i++){
 
+    }
   }
 
 
