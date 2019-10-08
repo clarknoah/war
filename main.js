@@ -275,10 +275,11 @@ class War{
       }
     ];
     this.cardsInPlay = [];
-
     for(let i=1;i<=numberOfPlayers; i++){
       this.addPlayer();
     }
+    this.shuffle();
+    this.distributeCards();
   }
 
   //Creates a player
@@ -313,38 +314,76 @@ class War{
   //Begins the actual game
   startGame(){
     console.log('Game has started');
+    this.conductTurn();
   }
 
   //Plays a turn
-  conductTurn(){
-    console.log(`---------- Turn Has Begun -----------`);
-    //Move active card into play area and assign the player index to card
-    //to know whos card is whos
+
+  assignCardsInPlay(){
     for(let i=0; i < this.players.length; i++){
       var card = this.players[i].cards.pop();
       console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
       card.player=i;
       this.cardsInPlay.push(card);
     }
+  }
+
+
+  conductTurn(){
+    console.log(`---------- Turn Has Begun -----------`);
+    //Move active card into play area and assign the player index to card
+    //to know whos card is whos
+    this.assignCardsInPlay();
 
     var highestCard = {value:-1};
+
+    var warDeclared = false;
+
+    var warPlayers = [];
 
     for(let i=0; i < this.cardsInPlay.length; i++){
       var currentCard = this.cardsInPlay[i];
 
       if(currentCard.value > highestCard.value){
         highestCard = currentCard;
-      }else if(currentCard.value === highestCard.value){
-        console.log(`War Condition`);
+        warDeclared = false;
+        warPlayers = [];
+
+      }else if(currentCard.value === highestCard.value && warDeclared === false){
+        warPlayers.push(currentCard);
+        warPlayers.push(highestCard);
+        warDeclared = true;
+
+      }else if(currentCard.value === highestCard.value && warDeclared === true){
+        warPlayers.push(currentCard);
       }
     }
 
+    if(warDeclared===false){
+      console.log(`Highest Card is Player ${highestCard.player} with ${highestCard.card} of ${highestCard.suit}`);
+    }else{
+      console.log(`War is declared`);
+      for(let i=0; i<warPlayers.length; i++){
+        var card = warPlayers[i];
+        console.log(`Player ${card.player} has ${card.card} of ${card.suit}`);
+      }
+    }
+
+
+
+
   }
+
+  warDeclared(){
+
+  }
+
 }
 
 
  var game = new War(3);
- console.log(game.cards);
+ game.conductTurn();
+
 
 /*
 
