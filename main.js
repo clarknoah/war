@@ -362,6 +362,7 @@ class War{
     if(warDeclared===false){
       console.log(`Highest Card is Player ${highestCard.player} with ${highestCard.card} of ${highestCard.suit}`);
       this.resolveTurn(highestCard.player);
+      this.evaluateWinner();
     }else{
       console.log(`War is declared`);
       for(let i=0; i<warPlayers.length; i++){
@@ -373,9 +374,10 @@ class War{
 
 
 
+
   }
 
-  //Distributes cards to winner
+  //Distributes cards to winneR
   resolveTurn(winner){
     //add cards in play to beginning of winners deck
     console.log(`Winner was Player ${winner}`);
@@ -385,12 +387,31 @@ class War{
       this.players[winner].cards.unshift(card);
     }
     console.log(this.players[winner].cards.length);
+    this.cardsInPlay = [];
 
   }
   warDeclared(){
 
   }
 
+  //Ran at the end of a turn to determine if the game should continue
+  evaluateWinner(){
+
+
+    for(let i=0; i<this.players.length;i++){
+      var player = this.players[i];
+      if(player.cards.length===0){
+        this.players.splice(i,1);
+      }
+    }
+    if(this.players.length === 1){
+      this.endGame();
+    }else{
+      this.conductTurn();
+    }
+  }
+
+  endGame(){}
 }
 
 
