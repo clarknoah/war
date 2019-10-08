@@ -274,6 +274,7 @@ class War{
         value: 12
       }
     ];
+    this.cardsInPlay = [];
 
     for(let i=1;i<=numberOfPlayers; i++){
       this.addPlayer();
@@ -314,7 +315,31 @@ class War{
     console.log('Game has started');
   }
 
+  //Plays a turn
+  conductTurn(){
+    console.log(`---------- Turn Has Begun -----------`);
+    //Move active card into play area and assign the player index to card
+    //to know whos card is whos
+    for(let i=0; i < this.players.length; i++){
+      var card = this.players[i].cards.pop();
+      console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
+      card.player=i;
+      this.cardsInPlay.push(card);
+    }
 
+    var highestCard = {value:-1};
+
+    for(let i=0; i < this.cardsInPlay.length; i++){
+      var currentCard = this.cardsInPlay[i];
+
+      if(currentCard.value > highestCard.value){
+        highestCard = currentCard;
+      }else if(currentCard.value === highestCard.value){
+        console.log(`War Condition`);
+      }
+    }
+
+  }
 }
 
 
@@ -327,13 +352,7 @@ class War{
 
 2: Divy Up cards evenly between each player
 
-3: Determine which player goes first
-
-4: First player lays out card
-
-5: Second Player lays out card
-
-6: third player lays out card
+3:
 
 7: Evaluate following conditions
   1. If one player has the best card
