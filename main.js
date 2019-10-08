@@ -348,7 +348,8 @@ class War{
 
 
   conductTurn(){
-    console.log(`---------- Turn Has Begun -----------`);
+    console.log(`------------------------ Turn Has Begun ----------------------------`);
+    this.printPlacing();
     //Move active card into play area and assign the player index to card
     //to know whos card is whos
     this.assignCardsInPlay();
@@ -396,6 +397,7 @@ class War{
 
   }
   printPlacing(){
+    console.log(`----------- Game Status -------------`);
     for(let i=0; i<this.players.length; i++){
       console.log(`Player ${i} has ${this.players[i].cards.length} cards`);
     }
@@ -411,13 +413,11 @@ class War{
   //Distributes cards to winneR
   resolveTurn(winner){
     //add cards in play to beginning of winners deck
-    console.log(`Winner was Player ${winner}`);
-    console.log(this.players[winner].cards.length);
+    console.log(`Winner of round was Player ${winner}`);
     for(let i=0; i<this.cardsInPlay.length;i++){
       var card = this.cardsInPlay[i];
       this.players[winner].cards.unshift(card);
     }
-    console.log(this.players[winner].cards.length);
     this.cardsInPlay = [];
     this.warPlayers = [];
     this.spoilsOfWar = [];
