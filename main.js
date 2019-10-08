@@ -275,6 +275,10 @@ class War{
       }
     ];
     this.cardsInPlay = [];
+    this.playersInPlay = [];
+    this.warPlayers = [];
+    this.spoilsOfWar = [];
+    this.warIsDeclared = false;
     for(let i=1;i<=numberOfPlayers; i++){
       this.addPlayer();
     }
@@ -320,12 +324,24 @@ class War{
   //Plays a turn
 
   assignCardsInPlay(){
-    for(let i=0; i < this.players.length; i++){
-      var card = this.players[i].cards.pop();
-      console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
-      card.player=i;
-      this.cardsInPlay.push(card);
+
+    if(this.warPlayers.length!==0){
+      for(let i=0; i < this.warPlayers.length; i++){
+        var player = this.warPlayers[i].player;
+        var card = this.players[player].cards.pop();
+        console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
+        card.player=i;
+        this.cardsInPlay.push(card);
+      }
+    }else {
+      for(let i=0; i < this.players.length; i++){
+        var card = this.players[i].cards.pop();
+        console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
+        card.player=i;
+        this.cardsInPlay.push(card);
+      }
     }
+
   }
 
 
@@ -337,38 +353,36 @@ class War{
 
     var highestCard = {value:-1};
 
-    var warDeclared = false;
 
-    var warPlayers = [];
 
     for(let i=0; i < this.cardsInPlay.length; i++){
       var currentCard = this.cardsInPlay[i];
 
       if(currentCard.value > highestCard.value){
         highestCard = currentCard;
-        warDeclared = false;
-        warPlayers = [];
+        this.warIsDeclared = false;
 
-      }else if(currentCard.value === highestCard.value && warDeclared === false){
-        warPlayers.push(currentCard);
-        warPlayers.push(highestCard);
-        warDeclared = true;
+      }else if(currentCard.value === highestCard.value && this.warIsDeclared === false){
+        this.warPlayers.push(currentCard);
+        this.warPlayers.push(highestCard);
+        this.warIsDeclared = true;
 
-      }else if(currentCard.value === highestCard.value && warDeclared === true){
-        warPlayers.push(currentCard);
+      }else if(currentCard.value === highestCard.value && this.warIsDeclared === true){
+        this.warPlayers.push(currentCard);
       }
     }
 
-    if(warDeclared===false){
+    if(this.warIsDeclared===false){
       console.log(`Highest Card is Player ${highestCard.player} with ${highestCard.card} of ${highestCard.suit}`);
       this.resolveTurn(highestCard.player);
       this.evaluateWinner();
     }else{
       console.log(`War is declared`);
-      for(let i=0; i<warPlayers.length; i++){
-        var card = warPlayers[i];
+      for(let i=0; i<this.warPlayers.length; i++){
+        var card = this.warPlayers[i];
         console.log(`Player ${card.player} has ${card.card} of ${card.suit}`);
       }
+      this.warDeclared();
     }
 
 
@@ -388,12 +402,40 @@ class War{
     }
     console.log(this.players[winner].cards.length);
     this.cardsInPlay = [];
+    this.warPlayers = [];
+    this.spoilsOfWar = [];
 
   }
+
   warDeclared(){
 
+    //Add cardsInPlay to spoils
+    this.soilsOfWar.concat(this.cardsInPlay);
+
+    //for all participating players, add to the spoils
+    for(let i=0; i<this.warPlayers.length; i++){
+      var player = this.warPlayers[i].player;
+      var cardsStillOwed = 3;
+      while(this.players[player].cards.length > 1 && cardsStillOwed > 0){
+        this.spoilsOfWar.push(this.players[player].cards.pop());
+        cardsStillOwed--;
+        console.log(`Cards Still owed: ${cardsStillOwed}`);
+      }
+
+    }
+    console.log(`The Spoils of War:`);
+    console.log(this.spoilsOfWar);
+    for(let i = 0; i<this.spoilsOfWar.length; i++){
+      var spoils = this.spoilsOfWar[i];
+      console.log(`The ${spoils.card} of ${spoils.suit} is one the line`);
+    }
+    this.conductTurn();
   }
 
+  //Determines rules for war
+  conductWar(){
+
+  }
   //Ran at the end of a turn to determine if the game should continue
   evaluateWinner(){
 
@@ -407,6 +449,7 @@ class War{
     if(this.players.length === 1){
       this.endGame();
     }else{
+      console.log("The Show Must Go On");
       this.conductTurn();
     }
   }
