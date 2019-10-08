@@ -326,6 +326,7 @@ class War{
   assignCardsInPlay(){
 
     if(this.warPlayers.length!==0){
+      console.log(`-------- War Round ---------`);
       for(let i=0; i < this.warPlayers.length; i++){
         var player = this.warPlayers[i].player;
         var card = this.players[player].cards.pop();
@@ -334,6 +335,7 @@ class War{
         this.cardsInPlay.push(card);
       }
     }else {
+      console.log(`-------- Regular Round ---------`);
       for(let i=0; i < this.players.length; i++){
         var card = this.players[i].cards.pop();
         console.log(`Player ${i} plays: ${card.card} of ${card.suit}`);
@@ -373,6 +375,9 @@ class War{
     }
 
     if(this.warIsDeclared===false){
+      if(this.warPlayers.length!==0){
+        this.resolveWar(highestCard.player);
+      }
       console.log(`Highest Card is Player ${highestCard.player} with ${highestCard.card} of ${highestCard.suit}`);
       this.resolveTurn(highestCard.player);
       this.evaluateWinner();
@@ -390,7 +395,19 @@ class War{
 
 
   }
+  printPlacing(){
+    for(let i=0; i<this.players.length; i++){
+      console.log(`Player ${i} has ${this.players[i].cards.length} cards`);
+    }
+  }
+  resolveWar(winner){
+    for(let i=0; i<this.spoilsOfWar.length;i++){
+      this.players[winner].cards.unshift(this.spoilsOfWar[i]);
+    }
+    this.spoilsOfWar = [];
+    this.warPlayers = [];
 
+  }
   //Distributes cards to winneR
   resolveTurn(winner){
     //add cards in play to beginning of winners deck
@@ -404,22 +421,29 @@ class War{
     this.cardsInPlay = [];
     this.warPlayers = [];
     this.spoilsOfWar = [];
+    this.printPlacing();
 
   }
 
   warDeclared(){
 
     //Add cardsInPlay to spoils
-    this.soilsOfWar.concat(this.cardsInPlay);
+    console.log(this.cardsInPlay);
+    this.spoilsOfWar = this.spoilsOfWar.concat(this.cardsInPlay);
+
+    this.cardsInPlay = [];
+    console.log(this.spoilsOfWar.length);
 
     //for all participating players, add to the spoils
     for(let i=0; i<this.warPlayers.length; i++){
-      var player = this.warPlayers[i].player;
+      var playerIndex = this.warPlayers[i].player;
       var cardsStillOwed = 3;
-      while(this.players[player].cards.length > 1 && cardsStillOwed > 0){
-        this.spoilsOfWar.push(this.players[player].cards.pop());
-        cardsStillOwed--;
-        console.log(`Cards Still owed: ${cardsStillOwed}`);
+      if(this.players[playerIndex].cards.length > 3){
+        this.spoilsOfWar.push(this.players[playerIndex].cards.pop());
+        this.spoilsOfWar.push(this.players[playerIndex].cards.pop());
+        this.spoilsOfWar.push(this.players[playerIndex].cards.pop());
+      }else{
+        console.log(`Player ${this.players[playerIndex]} is out of the Game`);
       }
 
     }
@@ -430,11 +454,6 @@ class War{
       console.log(`The ${spoils.card} of ${spoils.suit} is one the line`);
     }
     this.conductTurn();
-  }
-
-  //Determines rules for war
-  conductWar(){
-
   }
   //Ran at the end of a turn to determine if the game should continue
   evaluateWinner(){
