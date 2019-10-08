@@ -1,6 +1,14 @@
 console.log("it works!");
 
 
+class player{
+  constructor(){
+
+  }
+}
+
+
+
 class War{
   constructor(numberOfPlayers){
     for(let i=0;i<=numberOfPlayers; i++){
@@ -13,7 +21,7 @@ class War{
 
   }
 
-  
+
 
   //Begins the actual game
   startGame(){
