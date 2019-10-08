@@ -1,9 +1,9 @@
 console.log("it works!");
 
 
-class player{
+class Player{
   constructor(){
-
+    this.cards = [];
   }
 }
 
@@ -275,26 +275,36 @@ class War{
       }
     ];
 
-    for(let i=0;i<=numberOfPlayers; i++){
+    for(let i=1;i<=numberOfPlayers; i++){
       this.addPlayer();
     }
   }
 
   //Creates a player
   addPlayer(){
-
+    this.players.push(new Player);
   }
 
 
   //Shuffles Deck
-  shuffle(){
-    
+  shuffle() {
+      for (let i = this.cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+      }
+
   }
+
 
   //Distributes cards evenly to all players
   distributeCards(){
-    for(let i=0;i<this.cards.length; i++){
-
+    for(let i=0, j=0; i < this.cards.length; i++){
+      if(j===3){
+        j=0;
+      }
+      var card = this.cards[i];
+      this.players[j].cards.push(card);
+      j++;
     }
   }
 
@@ -306,6 +316,10 @@ class War{
 
 
 }
+
+
+ var game = new War(3);
+ console.log(game.cards);
 
 /*
 
