@@ -1,0 +1,16 @@
+* {
+  border: 1px red solid;
+  box-sizing: border-box;
+
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-items:
+}
