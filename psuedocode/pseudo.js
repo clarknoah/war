@@ -27,7 +27,7 @@ class Deck{
     this.shuffle();
     this.shuffle();
     this.shuffle();
-    
+
   }
   createCards(){
     var value = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -130,7 +130,7 @@ class WarGame{
       }
     }
     if(this.warCandidates.length === removePlayers.length){
-      //console.log("Uhh, both players ran out of cards, wtf");
+      console.log("Uhh, both players ran out of cards, wtf");
       for(let i = 0; i < this.players.length; i++){
 
         //if(this.players[i].length > 0){}
@@ -176,7 +176,7 @@ class WarGame{
 
   conductTurn(){
     this.getPlayerCardCount();
-    this.numberOfRounds++;
+
     //Doesn't do any mutation of cards
     this.compareCards();
     this.popPlayersLastCard();
@@ -191,7 +191,11 @@ class WarGame{
       }else if(this.activeWarPlayers.length ===1){
         this.winnerOfRound = this.activeWarPlayers[0];
         this.assignWinnerCards();
-        this.players[this.winnerOfRound].addRoundWon();
+        this.finishTurn();
+      }else if(this.activeWarPlayers.length === 0){
+        console.log(this.warCandidates);
+        this.winnerOfRound = parseInt(prompt(`Players ${this.warCandidates.toString()} ran out of cards on war, which should win?`));
+        this.assignWinnerCards();
         this.finishTurn();
       }
     }else{
@@ -251,15 +255,22 @@ class WarGame{
 
   assignWinnerCards(){
     this.receiveSpoilsOfWar();
+    this.players[this.winnerOfRound].addRoundWon();
 
   }
 
   finishTurn(){
     this.determineActivePlayers();
+    this.numberOfRounds++;
     if(this.activePlayers.length === 1){
       //console.log(`Game Over: Player ${this.activePlayers[0]} wins!`)
       this.endGame();
     }else if(this.activePlayers.length > 1){
+      this.winnerOfRound = null;
+      this.activeWarPlayers = [];
+      this.warDeclared = false;
+      this.warCandidates = [];
+
       console.log(`------------------ New Turn -----------------------`)
       this.conductTurn();
     }
@@ -269,9 +280,15 @@ class WarGame{
     console.log(`Number of Rounds: ${this.numberOfRounds}`);
     console.log(`Number of Wars: ${this.numberOfWars}`);
     console.log(`Game Winner: Player ${this.winnerOfRound}`);
+    let totalRounds = 0;
+    for(let i = 0; i < this.players.length; i++){
+      totalRounds += this.players[i].roundsWon;
+      console.log(`P${i} won ${this.players[i].roundsWon}`);
+    }
+    console.log(`Player Rounds: ${totalRounds}, Total Rounds: ${this.numberOfRounds}`);
     console.log(`------------ Game Ends ---------------`);
   }
 }
 
-var war = new WarGame(2);
+var war = new WarGame(10);
 war.conductTurn();
