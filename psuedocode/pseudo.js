@@ -122,7 +122,7 @@ class WarGame{
       if(playerHasEnoughCards){
         this.activeWarPlayers.push(playerId);
       }else{
-        //console.log(`Player ${playerId} doesn't have enough cards to play: ${this.players[playerId].cards.length}`);
+
 
         this.spoilsOfWar.push(... this.players[playerId].cards);
         this.players[playerId].cards = [];
@@ -133,10 +133,10 @@ class WarGame{
       console.log("Uhh, both players ran out of cards, wtf");
       for(let i = 0; i < this.players.length; i++){
 
-        //if(this.players[i].length > 0){}
+
       }
     }
-    //console.log(`Number of War Players: ${this.activeWarPlayers.length}-- War Players${this.activeWarPlayers.toString()}`)
+
     this.removeLosers(removePlayers);
   }
 
@@ -177,15 +177,15 @@ class WarGame{
   conductTurn(){
     this.getPlayerCardCount();
 
-    //Doesn't do any mutation of cards
+
     this.compareCards();
     this.popPlayersLastCard();
     if(this.warDeclared===true){
       this.numberOfWars++;
-      //console.log(`Conducting War`);
+
       this.determineActiveWarPlayers();
       if(this.activeWarPlayers.length > 1){
-        //console.log("More than 1 player in war");
+
         this.addSpoilsOfWar();
         this.conductTurn();
       }else if(this.activeWarPlayers.length ===1){
@@ -263,7 +263,7 @@ class WarGame{
     this.determineActivePlayers();
     this.numberOfRounds++;
     if(this.activePlayers.length === 1){
-      //console.log(`Game Over: Player ${this.activePlayers[0]} wins!`)
+
       this.endGame();
     }else if(this.activePlayers.length > 1){
       this.winnerOfRound = null;
